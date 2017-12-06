@@ -1,41 +1,41 @@
-with agency_lookup as (     
-    select
-        agency.id as agency_id,
-        subtier_agency.subtier_code as subtier_code     
-    from
-        agency         
-    inner join
-        subtier_agency on subtier_agency.subtier_agency_id=agency.subtier_agency_id
-),
-exec_comp_lookup as (
-    select
-        distinct(legal_entity.recipient_unique_id) as duns,
-        exec_comp.officer_1_name as officer_1_name,
-        exec_comp.officer_1_amount as officer_1_amount,
-        exec_comp.officer_2_name as officer_2_name,
-        exec_comp.officer_2_amount as officer_2_amount,
-        exec_comp.officer_3_name as officer_3_name,
-        exec_comp.officer_3_amount as officer_3_amount,
-        exec_comp.officer_4_name as officer_4_name,
-        exec_comp.officer_4_amount as officer_4_amount,
-        exec_comp.officer_5_name as officer_5_name,
-        exec_comp.officer_5_amount as officer_5_amount
-    from
-        references_legalentityofficers as exec_comp
-        inner join
-        legal_entity on legal_entity.legal_entity_id = exec_comp.legal_entity_id
-    where
-        exec_comp.officer_1_name is not null or
-        exec_comp.officer_1_amount is not null or
-        exec_comp.officer_2_name is not null or
-        exec_comp.officer_2_amount is not null or
-        exec_comp.officer_3_name is not null or
-        exec_comp.officer_3_amount is not null or
-        exec_comp.officer_4_name is not null or
-        exec_comp.officer_4_amount is not null or
-        exec_comp.officer_5_name is not null or
-        exec_comp.officer_5_amount is not null
-)
+-- with agency_lookup as (     
+--     select
+--         agency.id as agency_id,
+--         subtier_agency.subtier_code as subtier_code     
+--     from
+--         agency         
+--     inner join
+--         subtier_agency on subtier_agency.subtier_agency_id=agency.subtier_agency_id
+-- ),
+-- exec_comp_lookup as (
+--     select
+--         distinct(legal_entity.recipient_unique_id) as duns,
+--         exec_comp.officer_1_name as officer_1_name,
+--         exec_comp.officer_1_amount as officer_1_amount,
+--         exec_comp.officer_2_name as officer_2_name,
+--         exec_comp.officer_2_amount as officer_2_amount,
+--         exec_comp.officer_3_name as officer_3_name,
+--         exec_comp.officer_3_amount as officer_3_amount,
+--         exec_comp.officer_4_name as officer_4_name,
+--         exec_comp.officer_4_amount as officer_4_amount,
+--         exec_comp.officer_5_name as officer_5_name,
+--         exec_comp.officer_5_amount as officer_5_amount
+--     from
+--         references_legalentityofficers as exec_comp
+--         inner join
+--         legal_entity on legal_entity.legal_entity_id = exec_comp.legal_entity_id
+--     where
+--         exec_comp.officer_1_name is not null or
+--         exec_comp.officer_1_amount is not null or
+--         exec_comp.officer_2_name is not null or
+--         exec_comp.officer_2_amount is not null or
+--         exec_comp.officer_3_name is not null or
+--         exec_comp.officer_3_amount is not null or
+--         exec_comp.officer_4_name is not null or
+--         exec_comp.officer_4_amount is not null or
+--         exec_comp.officer_5_name is not null or
+--         exec_comp.officer_5_amount is not null
+-- )
 select
     'asst_aw_' ||
         coalesce(tf.awarding_sub_tier_agency_c,'-none-') || '_' ||
@@ -54,15 +54,16 @@ select
         when tf.assistance_type = '10' then 'Direct Payment with Unrestricted Use'
         when tf.assistance_type = '11' then 'Other Financial Assistance'
     end as type_description,
-    ac.type_name as category,
+    -- ac.type_name as category,
     null as piid,
     tf.fain as fain,
     null as uri,
     uniq_award.total_obligation as total_obligation,
     null as total_outlay,
-    awarding_agency.agency_id as awarding_agency_id,
+    -- awarding_agency.agency_id as awarding_agency_id,
+    awarding_agency.id as awarding_agency_id,
     tf.awarding_sub_tier_agency_c as awarding_sub_tier_agency_c,
-    funding_agency.agency_id as funding_agency_id,
+    -- funding_agency.agency_id as funding_agency_id,
     'DBR' as data_source,
     uniq_award.signed_date as date_signed,
     tf.award_description as description,
@@ -82,16 +83,16 @@ select
     tf.awardee_or_recipient_legal as recipient_name,
 
     -- executive compensation data
-    exec_comp.officer_1_name as officer_1_name,
-    exec_comp.officer_1_amount as officer_1_amount,
-    exec_comp.officer_2_name as officer_2_name,
-    exec_comp.officer_2_amount as officer_2_amount,
-    exec_comp.officer_3_name as officer_3_name,
-    exec_comp.officer_3_amount as officer_3_amount,
-    exec_comp.officer_4_name as officer_4_name,
-    exec_comp.officer_4_amount as officer_4_amount,
-    exec_comp.officer_5_name as officer_5_name,
-    exec_comp.officer_5_amount as officer_5_amount,
+    -- exec_comp.officer_1_name as officer_1_name,
+    -- exec_comp.officer_1_amount as officer_1_amount,
+    -- exec_comp.officer_2_name as officer_2_name,
+    -- exec_comp.officer_2_amount as officer_2_amount,
+    -- exec_comp.officer_3_name as officer_3_name,
+    -- exec_comp.officer_3_amount as officer_3_amount,
+    -- exec_comp.officer_4_name as officer_4_name,
+    -- exec_comp.officer_4_amount as officer_4_amount,
+    -- exec_comp.officer_5_name as officer_5_name,
+    -- exec_comp.officer_5_amount as officer_5_amount,
 
     -- business categories
     tf.legal_entity_address_line1 as recipient_location_address_line1,
@@ -200,12 +201,16 @@ from
             transaction_fabs.action_date desc, 
             transaction_fabs.award_modification_amendme desc
     ) as uniq_award on uniq_award.afa_generated_unique = tf.afa_generated_unique
+    -- inner join
+    -- award_category as ac on ac.type_code = tf.assistance_type
+    -- inner join
+    -- agency_lookup as awarding_agency on awarding_agency.subtier_code = tf.awarding_sub_tier_agency_c 
+    -- left outer join
+    -- agency_lookup as funding_agency on funding_agency.subtier_code = tf.funding_sub_tier_agency_co
     inner join
-    award_category as ac on ac.type_code = tf.assistance_type
+    subtier_agency as awarding_subtier on awarding_subtier.subtier_code = tf.awarding_sub_tier_agency_c
     inner join
-    agency_lookup as awarding_agency on awarding_agency.subtier_code = tf.awarding_sub_tier_agency_c 
-    left outer join
-    agency_lookup as funding_agency on funding_agency.subtier_code = tf.funding_sub_tier_agency_co
-    left outer join
-    exec_comp_lookup as exec_comp on exec_comp.duns = tf.awardee_or_recipient_uniqu
+    agency as awarding_agency on awarding_subtier.subtier_agency_id = awarding_agency.subtier_agency_id
+    -- left outer join
+    -- exec_comp_lookup as exec_comp on exec_comp.duns = tf.awardee_or_recipient_uniqu
 ;
