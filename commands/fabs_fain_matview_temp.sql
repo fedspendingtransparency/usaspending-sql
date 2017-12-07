@@ -36,7 +36,7 @@
 --         exec_comp.officer_5_name is not null or
 --         exec_comp.officer_5_amount is not null
 -- )
-create materialized view fabs_fain_matview_temp1 as
+create materialized view fabs_fain_matview_temp2 as
 (
 select
     'asst_aw_' ||
@@ -57,22 +57,22 @@ select
         when tf.assistance_type = '11' then 'Other Financial Assistance'
     end as type_description,
     -- ac.type_name as category,
-    null as piid,
+    null::text as piid,
     tf.fain as fain,
-    null as uri,
+    null::text as uri,
     uniq_award.total_obligation as total_obligation,
-    null as total_outlay,
+    null::float as total_outlay,
     -- awarding_agency.agency_id as awarding_agency_id,
     awarding_agency.id as awarding_agency_id,
     tf.awarding_sub_tier_agency_c as awarding_sub_tier_agency_c,
     -- funding_agency.agency_id as funding_agency_id,
-    'DBR' as data_source,
+    'DBR'::text as data_source,
     uniq_award.signed_date as date_signed,
     tf.award_description as description,
     uniq_award.period_of_performance_start_date as period_of_performance_start_date,
     uniq_award.period_of_performance_current_end_date as period_of_performance_current_end_date,
-    null as potential_total_value_of_award,
-    null as base_and_all_options_value,
+    null::float as potential_total_value_of_award,
+    null::float as base_and_all_options_value,
     tf.modified_at as last_modified_date,   
     uniq_award.certified_date as certified_date,
     tf.transaction_id as latest_transaction_id,
@@ -142,7 +142,7 @@ select
     -- ppop data
     
     -- foreign
-    null as pop_foreign_province,
+    null::text as pop_foreign_province,
     
     -- country
     case
