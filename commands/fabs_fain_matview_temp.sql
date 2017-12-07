@@ -76,6 +76,7 @@ select
     tf.modified_at as last_modified_date,   
     uniq_award.certified_date as certified_date,
     tf.transaction_id as latest_transaction_id,
+    tf.record_type as record_type,
     'asst_tx_' || tf.afa_generated_unique as latest_transaction_unique,
     0 as total_subaward_amount,
     0 as subaward_count,
@@ -218,3 +219,19 @@ from
 
     ) 
 ;
+
+create index fabs_fain_duns_idx on fabs_fain_matview_temp2 (recipient_unique_id);
+create index fabs_fain_generated_unique_award_id_idx on fabs_fain_matview_temp2 (generated_unique_award_id);
+create index fabs_fain_awarding_sub_tier_idx on fabs_fain_matview_temp2 (awarding_sub_tier_agency_c);
+create index fabs_fain_awarding_agency_id_idx on fabs_fain_matview_temp2 (awarding_agency_id);
+create index fabs_fain_duns_idx on fabs_fain_matview_temp2 (recipient_unique_id);
+create index fabs_fain_recipient_name_idx on fabs_fain_matview_temp2 (recipient_name);
+create index fabs_fain_fain_idx on fabs_fain_matview_temp2 (recipient_fain_id);
+create index fabs_fain_date_signed_idx on fabs_fain_matview_temp2 (date_signed);
+create index fabs_fain_certified_date_idx on fabs_fain_matview_temp2 (certified_date);
+
+
+
+
+
+
