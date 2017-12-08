@@ -36,7 +36,7 @@
 --         exec_comp.officer_5_name is not null or
 --         exec_comp.officer_5_amount is not null
 -- )
-create materialized view fabs_fain_matview_temp2 as
+create materialized view fabs_fain_matview_temp2_1 as
 (
 select
     'asst_aw_' ||
