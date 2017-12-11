@@ -13,10 +13,10 @@ select
     tf.referenced_idv_agency_iden,
     tf.piid as piid,
     tf.parent_award_id as parent_award_piid,
-    null as fain,
-    null as uri,
+    null::text as fain,
+    null::text as uri,
     uniq_award.total_obligation as total_obligation,
-    null as total_outlay,
+    null::float as total_outlay,
     awarding_agency.agency_id as awarding_agency_id,
     tf.awarding_sub_tier_agency_c as awarding_sub_tier_agency_c,
     funding_agency.agency_id as funding_agency_id,
@@ -25,7 +25,7 @@ select
     tf.award_description as description,
     uniq_award.period_of_performance_start_date as period_of_performance_start_date,
     uniq_award.period_of_performance_current_end_date as period_of_performance_current_end_date,
-    null as potential_total_value_of_award,
+    null::float as potential_total_value_of_award,
     uniq_award.base_and_all_options_value as base_and_all_options_value,
     tf.last_modified as last_modified_date, 
     uniq_award.certified_date as certified_date,
@@ -56,7 +56,7 @@ select
     tf.legal_entity_address_line3 as recipient_location_address_line3,
     
     -- foreign province
-    null as recipient_location_foreign_province,
+    null::text as recipient_location_foreign_province,
     
     -- country
     tf.legal_entity_country_code as recipient_location_country_code,
@@ -67,8 +67,8 @@ select
     tf.legal_entity_state_descrip as recipient_location_state_name,
     
     -- county (NONE FOR FPDS)
-    null as recipient_location_county_code,
-    null as recipient_location_county_name,
+    null::text as recipient_location_county_code,
+    null::text as recipient_location_county_name,
     
     -- city
     tf.legal_entity_city_name as recipient_location_city_name,
@@ -82,7 +82,7 @@ select
     -- ppop data
     
     -- foreign
-    null as pop_foreign_province,
+    null::text as pop_foreign_province,
     
     -- country
     tf.place_of_perform_country_c as pop_country_code,
@@ -93,7 +93,7 @@ select
     tf.place_of_perfor_state_desc as pop_state_name,
     
     -- county
-    null as pop_county_code,
+    null::text as pop_county_code,
     tf.place_of_perform_county_na as pop_county_name,
     
     -- city
