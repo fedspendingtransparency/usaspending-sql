@@ -20,7 +20,7 @@ select
     awarding_agency.agency_id as awarding_agency_id,
     tf.awarding_sub_tier_agency_c as awarding_sub_tier_agency_c,
     funding_agency.agency_id as funding_agency_id,
-    'DBR' as data_source,
+    'DBR'::text as data_source,
     uniq_award.signed_date as date_signed,
     tf.award_description as description,
     uniq_award.period_of_performance_start_date as period_of_performance_start_date,
