@@ -133,7 +133,7 @@ from
             null as base_and_all_options_value,
             sum(coalesce(transaction_fabs.federal_action_obligation::double precision, 0::double precision)) over w as total_obligation
         from transaction_fabs
-        where transaction_fabs.record_type = '1' and action_date >= '2017-10-01'
+        where transaction_fabs.record_type = '1'
         window w as (partition by transaction_fabs.uri, transaction_fabs.awarding_sub_tier_agency_c)
         order by 
             transaction_fabs.uri, 
