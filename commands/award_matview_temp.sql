@@ -1,5 +1,5 @@
 create materialized view award_matview_temp as (
-select
+(select
     distinct on (tf.piid, tf.parent_award_id, tf.agency_id, tf.referenced_idv_agency_iden)
     'cont_aw_' ||
         coalesce(tf.agency_id,'-none-') || '_' ||
@@ -125,11 +125,11 @@ order by
     tf.referenced_idv_agency_iden, 
     tf.action_date desc, 
     tf.award_modification_amendme desc, 
-    tf.transaction_number desc
+    tf.transaction_number desc)
 
 union all
 
-select
+(select
     'asst_aw_' ||
         coalesce(tf.awarding_sub_tier_agency_c,'-none-') || '_' ||
         coalesce(tf.fain, '-none-') || '_' ||
@@ -282,11 +282,11 @@ from
     inner join
     subtier_agency as awarding_subtier on awarding_subtier.subtier_code = tf.awarding_sub_tier_agency_c
     left outer join
-    exec_comp_lookup as exec_comp on exec_comp.duns = tf.awardee_or_recipient_uniqu
+    exec_comp_lookup as exec_comp on exec_comp.duns = tf.awardee_or_recipient_uniqu)
 
 union all
 
-select
+(select
     'asst_aw_' ||
         coalesce(tf.awarding_sub_tier_agency_c,'-none-') || '_' ||
         '-none-' || '_' ||
@@ -439,5 +439,5 @@ from
     inner join
     subtier_agency as awarding_subtier on awarding_subtier.subtier_code = tf.awarding_sub_tier_agency_c
     left outer join
-    exec_comp_lookup as exec_comp on exec_comp.duns = tf.awardee_or_recipient_uniqu
+    exec_comp_lookup as exec_comp on exec_comp.duns = tf.awardee_or_recipient_uniqu)
 );
