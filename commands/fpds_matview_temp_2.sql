@@ -1,5 +1,4 @@
-explain analyze verbose 
--- create materialized view fpds_matview_temp as
+create materialized view fpds_matview_temp_2 as
         select
             distinct on (tf.piid, tf.parent_award_id, tf.agency_id, tf.referenced_idv_agency_iden)
 --            tf.piid,
@@ -25,8 +24,8 @@ explain analyze verbose
     tf.contract_award_type as type,
     tf.contract_award_type_desc as type_description,
     ac.type_name as category,
-    tf.agency_id,
-    tf.referenced_idv_agency_iden,
+    -- tf.agency_id,
+    -- tf.referenced_idv_agency_iden,
     tf.piid as piid,
     tf.parent_award_id as parent_award_piid,
     null::text as fain,
@@ -36,7 +35,7 @@ explain analyze verbose
     awarding_agency.agency_id as awarding_agency_id,
     tf.awarding_sub_tier_agency_c as awarding_sub_tier_agency_c,
     funding_agency.agency_id as funding_agency_id,
-    'DBR' as data_source,
+    'DBR'::text as data_source,
     min(tf.action_date) over w as date_signed,
     tf.award_description as description,
     min(tf.period_of_performance_star::date) over w as period_of_performance_start_date,
@@ -130,7 +129,6 @@ explain analyze verbose
     agency_lookup as funding_agency on funding_agency.subtier_code = tf.funding_sub_tier_agency_co
      left outer join
      exec_comp_lookup as exec_comp on exec_comp.duns = tf.awardee_or_recipient_uniqu
-    where action_date >= '2015-02-01 00:00:00' and action_date < '2015-03-01 00:00:00'
         window w as (partition by tf.piid, tf.parent_award_id, tf.agency_id, tf.referenced_idv_agency_iden)
         order by 
             tf.piid, 
