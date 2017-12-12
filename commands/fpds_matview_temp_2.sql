@@ -1,9 +1,9 @@
-
-create materialized view fpds_matview_temp_2 as
+explain analyze verbose 
+-- create materialized view fpds_matview_temp as
         select
             distinct on (tf.piid, tf.parent_award_id, tf.agency_id, tf.referenced_idv_agency_iden)
-            tf.piid,
-            tf.parent_award_id,
+--            tf.piid,
+--            tf.parent_award_id,
             tf.agency_id,
             tf.referenced_idv_agency_iden,
             tf.action_date,
