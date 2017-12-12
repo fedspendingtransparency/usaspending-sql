@@ -127,7 +127,6 @@ from
     agency_lookup as funding_agency on funding_agency.subtier_code = tf.funding_sub_tier_agency_co
     left outer join
     exec_comp_lookup as exec_comp on exec_comp.duns = tf.awardee_or_recipient_uniqu
-where piid='0029'
 window w as (partition by tf.piid, tf.parent_award_id, tf.agency_id, tf.referenced_idv_agency_iden)
 order by 
     tf.piid, 

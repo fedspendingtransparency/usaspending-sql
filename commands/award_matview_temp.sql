@@ -20,6 +20,7 @@ select
     awarding_agency.agency_id as awarding_agency_id,
     tf.awarding_sub_tier_agency_c as awarding_sub_tier_agency_c,
     funding_agency.agency_id as funding_agency_id,
+    tf.funding_sub_tier_agency_co as funding_sub_tier_agency_co,
     'DBR'::text as data_source,
     min(tf.action_date) over w as date_signed,
     tf.award_description as description,
@@ -27,10 +28,10 @@ select
     max(tf.period_of_performance_curr::date) over w as period_of_performance_current_end_date,
     null::float as potential_total_value_of_award,
     sum(coalesce(tf.base_and_all_options_value::double precision, 0::double precision)) over w as base_and_all_options_value,
-    tf.last_modified as last_modified_date, 
+    tf.last_modified::date as last_modified_date, 
     max(tf.action_date) over w as certified_date,
     tf.transaction_id as latest_transaction_id,
-    null::text as record_type,
+    null::int as record_type,
     'cont_tx_' || tf.detached_award_proc_unique as latest_transaction_unique,
     0 as total_subaward_amount,
     0 as subaward_count,
@@ -116,7 +117,6 @@ from
     agency_lookup as funding_agency on funding_agency.subtier_code = tf.funding_sub_tier_agency_co
     left outer join
     exec_comp_lookup as exec_comp on exec_comp.duns = tf.awardee_or_recipient_uniqu
-where piid='0029'
 window w as (partition by tf.piid, tf.parent_award_id, tf.agency_id, tf.referenced_idv_agency_iden)
 order by 
     tf.piid, 
@@ -167,7 +167,7 @@ select
     uniq_award.period_of_performance_current_end_date as period_of_performance_current_end_date,
     null::float as potential_total_value_of_award,
     null::float as base_and_all_options_value,
-    tf.modified_at as last_modified_date,   
+    tf.modified_at::date as last_modified_date,   
     uniq_award.certified_date as certified_date,
     tf.transaction_id as latest_transaction_id,
     tf.record_type as record_type,
@@ -324,7 +324,7 @@ select
     uniq_award.period_of_performance_current_end_date as period_of_performance_current_end_date,
     null::float as potential_total_value_of_award,
     null::float as base_and_all_options_value,
-    tf.modified_at as last_modified_date,   
+    tf.modified_at::date as last_modified_date,   
     uniq_award.certified_date as certified_date,
     tf.transaction_id as latest_transaction_id,
     tf.record_type as record_type,
