@@ -1,4 +1,4 @@
-create materialized view fpds_matview_temp_3 as (
+create materialized view fpds_matview as (
 select
     distinct on (tf.piid, tf.parent_award_id, tf.agency_id, tf.referenced_idv_agency_iden)
     -- extra columns
@@ -33,6 +33,8 @@ select
     tf.awarding_sub_tier_agency_c as awarding_sub_tier_agency_c,
     funding_agency.agency_id as funding_agency_id,
     'DBR'::text as data_source,
+    tf.action_date::date as action_date,
+    fy(tf.action_date) as fiscal_year,
     min(tf.action_date) over w as date_signed,
     tf.award_description as description,
     min(tf.period_of_performance_star::date) over w as period_of_performance_start_date,

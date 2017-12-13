@@ -1,10 +1,10 @@
-create materialized view fabs_uri_matview_temp_1 as
+create materialized view fabs_fain_matview_temp_2 as
 (
 select
     'asst_aw_' ||
         coalesce(tf.awarding_sub_tier_agency_c,'-none-') || '_' ||
-        '-none-' || '_' ||
-        coalesce(tf.uri, '-none-') as generated_unique_award_id,
+        coalesce(tf.fain, '-none-') || '_' ||
+        '-none-' as generated_unique_award_id,
     tf.assistance_type as type,
     case
         when tf.assistance_type = '02' then 'Block Grant'
@@ -20,8 +20,8 @@ select
     end as type_description,
     ac.type_name as category,
     null::text as piid,
-    null::text as fain,
-    tf.uri as uri,
+    tf.fain as fain,
+    null::text as uri,
     uniq_award.total_obligation as total_obligation,
     null::float as total_outlay,
     awarding_agency.agency_id as awarding_agency_id,
@@ -29,6 +29,8 @@ select
     funding_agency.agency_id as funding_agency_id,
     tf.funding_sub_tier_agency_co as funding_sub_tier_agency_co,
     'DBR'::text as data_source,
+    tf.action_date::date as action_date,
+    fy(tf.action_date) as fiscal_year,
     uniq_award.signed_date as date_signed,
     tf.award_description as description,
     uniq_award.period_of_performance_start_date as period_of_performance_start_date,
@@ -119,13 +121,13 @@ from
     inner join 
     (
         select
-            distinct on (transaction_fabs.uri, transaction_fabs.awarding_sub_tier_agency_c)
-            transaction_fabs.uri,
+            distinct on (transaction_fabs.fain, transaction_fabs.awarding_sub_tier_agency_c)
+            transaction_fabs.fain,
             transaction_fabs.awarding_sub_tier_agency_c,
             transaction_fabs.action_date,
             transaction_fabs.award_modification_amendme,
             transaction_fabs.afa_generated_unique,
-            count(transaction_fabs.uri) over w as sumuri,
+            count(transaction_fabs.fain) over w as sumfain,
             max(transaction_fabs.action_date) over w as certified_date,
             min(transaction_fabs.action_date) over w as signed_date,
             min(transaction_fabs.period_of_performance_star::date) over w as period_of_performance_start_date,
@@ -133,10 +135,10 @@ from
             null as base_and_all_options_value,
             sum(coalesce(transaction_fabs.federal_action_obligation::double precision, 0::double precision)) over w as total_obligation
         from transaction_fabs
-        where transaction_fabs.record_type = '1'
-        window w as (partition by transaction_fabs.uri, transaction_fabs.awarding_sub_tier_agency_c)
+        where transaction_fabs.record_type = '2'
+        window w as (partition by transaction_fabs.fain, transaction_fabs.awarding_sub_tier_agency_c)
         order by 
-            transaction_fabs.uri, 
+            transaction_fabs.fain, 
             transaction_fabs.awarding_sub_tier_agency_c,  
             transaction_fabs.action_date desc, 
             transaction_fabs.award_modification_amendme desc
@@ -151,4 +153,4 @@ from
     subtier_agency as awarding_subtier on awarding_subtier.subtier_code = tf.awarding_sub_tier_agency_c
 	left outer join
 	exec_comp_lookup as exec_comp on exec_comp.duns = tf.awardee_or_recipient_uniqu
-); 
+);
