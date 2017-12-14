@@ -174,7 +174,8 @@ from
             business_types,
             cfda_number,
             cfda_title
-        from published_award_financial_assistance)') as transaction
+        from published_award_financial_assistance
+        where is_active=TRUE)') as transaction
         (
             -- unique ids + cols used for unique id
             detached_award_proc_unique text,
