@@ -1,4 +1,8 @@
-select *
+create materialized view transaction_matview as
+(
+select
+    *,
+    fy(action_date) as fiscal_year
 from
     dblink ('broker_server', '(select
             -- unique ids + cols used for unique id
@@ -82,8 +86,7 @@ from
             null as business_types,
             null as cfda_number,
             null as cfda_title
-        from detached_award_procurement
-        limit 5)
+        from detached_award_procurement)
 
         union all
 
@@ -169,8 +172,7 @@ from
             business_types,
             cfda_number,
             cfda_title
-        from published_award_financial_assistance
-        limit 5)') as transaction
+        from published_award_financial_assistance)') as transaction
         (
             -- unique ids + cols used for unique id
             detached_award_proc_unique text,
@@ -253,4 +255,5 @@ from
             business_types text,
             cfda_number text,
             cfda_title text
-        );
+        )
+);
