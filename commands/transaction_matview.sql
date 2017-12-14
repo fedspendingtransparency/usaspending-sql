@@ -1,3 +1,5 @@
+drop materialized view if exists transaction_matview;
+
 create materialized view transaction_matview as
 (
 select
