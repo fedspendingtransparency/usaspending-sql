@@ -170,7 +170,7 @@ from
             cfda_number,
             cfda_title
         from published_award_financial_assistance
-        limit 5)') as transaction_fpds
+        limit 5)') as transaction
         (
             -- unique ids + cols used for unique id
             detached_award_proc_unique text,
