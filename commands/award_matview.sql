@@ -100,7 +100,7 @@ create materialized view award_matview as (
     -- pop_zip4,
 
     -- congressional disctrict
-    pop_congressional_code.
+    pop_congressional_code,
 
     ac.type_name as category,
     awarding_agency.agency_id as awarding_agency_id,
@@ -434,7 +434,7 @@ union all
     -- pop_zip4,
 
     -- congressional disctrict
-    pop_congressional_code.
+    pop_congressional_code,
 
     ac.type_name as category,
     awarding_agency.agency_id as awarding_agency_id,
@@ -793,7 +793,7 @@ union all
     -- pop_zip4,
 
     -- congressional disctrict
-    pop_congressional_code.
+    pop_congressional_code,
 
     ac.type_name as category,
     awarding_agency.agency_id as awarding_agency_id,
