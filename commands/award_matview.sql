@@ -2,7 +2,106 @@ drop materialized view if exists award_matview;
 
 create materialized view award_matview as (
 (select
-    *, 
+    generated_unique_award_id,
+    type,
+    type_description,
+    contract_agency_id,
+    contract_referenced_idv_agency_iden,
+    piid,
+    parent_award_piid,
+    fain,
+    uri,
+    total_obligation,
+    total_outlay,
+    awarding_sub_tier_agency_c,
+    funding_sub_tier_agency_co,
+    data_source,
+    action_date,
+    date_signed,
+    description,
+    period_of_performance_start_date,
+    period_of_performance_current_end_date,
+    potential_total_value_of_award,
+    base_and_all_options_value,
+    last_modified_date,
+    certified_date,
+    record_type,
+    latest_transaction_unique_id,
+    total_subaward_amount,
+    subaward_count,
+
+    -- recipient data
+    recipient_unique_id, -- DUNS
+    recipient_name,
+
+    -- executive compensation data
+    officer_1_name,
+    officer_1_amount,
+    officer_2_name,
+    officer_2_amount,
+    officer_3_name,
+    officer_3_amount,
+    officer_4_name,
+    officer_4_amount,
+    officer_5_name,
+    officer_5_amount,
+
+    -- business categories
+    recipient_location_address_line1,
+    recipient_location_address_line2,
+    recipient_location_address_line3,
+
+    -- foreign province
+    recipient_location_foreign_province,
+
+    -- country
+    recipient_location_country_code,
+    recipient_location_country_name,
+
+    -- state
+    recipient_location_state_code,
+    recipient_location_state_name,
+
+    -- county (NONE FOR FPDS)
+    recipient_location_county_code,
+    recipient_location_county_name,
+
+    -- city
+    recipient_location_city_name,
+
+    -- zip
+    recipient_location_zip5,
+
+    -- congressional disctrict
+    recipient_location_congressional_code,
+
+    -- ppop data
+
+    -- foreign
+    pop_foreign_province,
+
+    -- country
+    pop_country_code,
+    pop_country_name,
+
+    -- state
+    pop_state_code,
+    pop_state_name,
+
+    -- county
+    pop_county_code,
+    pop_county_name,
+
+    -- city
+    pop_city_name,
+
+    -- zip
+    pop_zip5,
+    -- pop_zip4,
+
+    -- congressional disctrict
+    pop_congressional_code.
+
     ac.type_name as category,
     awarding_agency.agency_id as awarding_agency_id,
     funding_agency.agency_id as funding_agency_id,
@@ -237,7 +336,106 @@ from
 union all
 
 (select
-    *, 
+    generated_unique_award_id,
+    type,
+    type_description,
+    contract_agency_id,
+    contract_referenced_idv_agency_iden,
+    piid,
+    parent_award_piid,
+    fain,
+    uri,
+    total_obligation,
+    total_outlay,
+    awarding_sub_tier_agency_c,
+    funding_sub_tier_agency_co,
+    data_source,
+    action_date,
+    date_signed,
+    description,
+    period_of_performance_start_date,
+    period_of_performance_current_end_date,
+    potential_total_value_of_award,
+    base_and_all_options_value,
+    last_modified_date,
+    certified_date,
+    record_type,
+    latest_transaction_unique_id,
+    total_subaward_amount,
+    subaward_count,
+
+    -- recipient data
+    recipient_unique_id, -- DUNS
+    recipient_name,
+
+    -- executive compensation data
+    officer_1_name,
+    officer_1_amount,
+    officer_2_name,
+    officer_2_amount,
+    officer_3_name,
+    officer_3_amount,
+    officer_4_name,
+    officer_4_amount,
+    officer_5_name,
+    officer_5_amount,
+
+    -- business categories
+    recipient_location_address_line1,
+    recipient_location_address_line2,
+    recipient_location_address_line3,
+
+    -- foreign province
+    recipient_location_foreign_province,
+
+    -- country
+    recipient_location_country_code,
+    recipient_location_country_name,
+
+    -- state
+    recipient_location_state_code,
+    recipient_location_state_name,
+
+    -- county (NONE FOR FPDS)
+    recipient_location_county_code,
+    recipient_location_county_name,
+
+    -- city
+    recipient_location_city_name,
+
+    -- zip
+    recipient_location_zip5,
+
+    -- congressional disctrict
+    recipient_location_congressional_code,
+
+    -- ppop data
+
+    -- foreign
+    pop_foreign_province,
+
+    -- country
+    pop_country_code,
+    pop_country_name,
+
+    -- state
+    pop_state_code,
+    pop_state_name,
+
+    -- county
+    pop_county_code,
+    pop_county_name,
+
+    -- city
+    pop_city_name,
+
+    -- zip
+    pop_zip5,
+    -- pop_zip4,
+
+    -- congressional disctrict
+    pop_congressional_code.
+
     ac.type_name as category,
     awarding_agency.agency_id as awarding_agency_id,
     funding_agency.agency_id as funding_agency_id,
@@ -385,7 +583,7 @@ from
             pafa.award_modification_amendme desc
     ) as uniq_award on uniq_award.afa_generated_unique = tf.afa_generated_unique
     left outer join
-    executive_compensation as exec_comp on exec_comp.awardee_or_recipient_uniqu = tf.awardee_or_recipient_uniqu') as fpds_uniq_awards
+    executive_compensation as exec_comp on exec_comp.awardee_or_recipient_uniqu = tf.awardee_or_recipient_uniqu') as fabs_fain_uniq_awards
     (
         generated_unique_award_id text,
         type text,
@@ -497,7 +695,106 @@ from
 union all
 
 (select
-    *, 
+    generated_unique_award_id,
+    type,
+    type_description,
+    contract_agency_id,
+    contract_referenced_idv_agency_iden,
+    piid,
+    parent_award_piid,
+    fain,
+    uri,
+    total_obligation,
+    total_outlay,
+    awarding_sub_tier_agency_c,
+    funding_sub_tier_agency_co,
+    data_source,
+    action_date,
+    date_signed,
+    description,
+    period_of_performance_start_date,
+    period_of_performance_current_end_date,
+    potential_total_value_of_award,
+    base_and_all_options_value,
+    last_modified_date,
+    certified_date,
+    record_type,
+    latest_transaction_unique_id,
+    total_subaward_amount,
+    subaward_count,
+
+    -- recipient data
+    recipient_unique_id, -- DUNS
+    recipient_name,
+
+    -- executive compensation data
+    officer_1_name,
+    officer_1_amount,
+    officer_2_name,
+    officer_2_amount,
+    officer_3_name,
+    officer_3_amount,
+    officer_4_name,
+    officer_4_amount,
+    officer_5_name,
+    officer_5_amount,
+
+    -- business categories
+    recipient_location_address_line1,
+    recipient_location_address_line2,
+    recipient_location_address_line3,
+
+    -- foreign province
+    recipient_location_foreign_province,
+
+    -- country
+    recipient_location_country_code,
+    recipient_location_country_name,
+
+    -- state
+    recipient_location_state_code,
+    recipient_location_state_name,
+
+    -- county (NONE FOR FPDS)
+    recipient_location_county_code,
+    recipient_location_county_name,
+
+    -- city
+    recipient_location_city_name,
+
+    -- zip
+    recipient_location_zip5,
+
+    -- congressional disctrict
+    recipient_location_congressional_code,
+
+    -- ppop data
+
+    -- foreign
+    pop_foreign_province,
+
+    -- country
+    pop_country_code,
+    pop_country_name,
+
+    -- state
+    pop_state_code,
+    pop_state_name,
+
+    -- county
+    pop_county_code,
+    pop_county_name,
+
+    -- city
+    pop_city_name,
+
+    -- zip
+    pop_zip5,
+    -- pop_zip4,
+
+    -- congressional disctrict
+    pop_congressional_code.
+
     ac.type_name as category,
     awarding_agency.agency_id as awarding_agency_id,
     funding_agency.agency_id as funding_agency_id,
@@ -645,7 +942,7 @@ from
             pafa.award_modification_amendme desc
     ) as uniq_award on uniq_award.afa_generated_unique = tf.afa_generated_unique
     left outer join
-    executive_compensation as exec_comp on exec_comp.awardee_or_recipient_uniqu = tf.awardee_or_recipient_uniqu') as fpds_uniq_awards
+    executive_compensation as exec_comp on exec_comp.awardee_or_recipient_uniqu = tf.awardee_or_recipient_uniqu') as fabs_uri_uniq_awards
     (
         generated_unique_award_id text,
         type text,
