@@ -29,6 +29,25 @@ create materialized view award_matview as (
     latest_transaction_unique_id,
     total_subaward_amount,
     subaward_count,
+    pulled_from,
+    product_or_service_code,
+    product_or_service_co_desc,
+    extent_competed,
+    extent_compete_description,
+    type_of_contract_pricing,
+    naics,
+    naics_description,
+    idv_type,
+    idv_type_description,
+    type_set_aside,
+    type_set_aside_description,
+    assistance_type,
+    original_loan_subsidy_cost,
+    record_type,
+    business_funds_indicator,
+    business_types,
+    cfda_number,
+    cfda_title,
 
     -- recipient data
     recipient_unique_id, -- DUNS
@@ -100,12 +119,12 @@ create materialized view award_matview as (
     -- pop_zip4,
 
     -- congressional disctrict
-    pop_congressional_code
+    pop_congressional_code,
 
-    -- ac.type_name as category,
-    -- awarding_agency.agency_id as awarding_agency_id,
-    -- funding_agency.agency_id as funding_agency_id,
-    -- fy(action_date) as fiscal_year
+    ac.type_name as category,
+    awarding_agency.agency_id as awarding_agency_id,
+    funding_agency.agency_id as funding_agency_id,
+    fy(action_date) as fiscal_year
 from
     dblink ('broker_stg_server', 'select
         distinct on (tf.piid, tf.parent_award_id, tf.agency_id, tf.referenced_idv_agency_iden)
@@ -140,7 +159,26 @@ from
         ''cont_tx_'' || tf.detached_award_proc_unique as latest_transaction_unique_id,
         0 as total_subaward_amount,
         0 as subaward_count,
-        
+        tf.pulled_from as pulled_from,
+        tf.product_or_service_code as product_or_service_code,
+        tf.product_or_service_co_desc as product_or_service_co_desc,
+        tf.extent_competed as extent_competed,
+        tf.extent_compete_description as extent_compete_description,
+        tf.type_of_contract_pricing as type_of_contract_pricing,
+        tf.naics as naics,
+        tf.naics_description as naics_description,
+        tf.idv_type as idv_type,
+        tf.idv_type_description as idv_type_description,
+        tf.type_set_aside as type_set_aside,
+        tf.type_set_aside_description as type_set_aside_description,
+        null::text as assistance_type,
+        null::text as original_loan_subsidy_cost,
+        null::text as record_type,
+        null::text as business_funds_indicator,
+        null::text as business_types,
+        null::text as cfda_number,
+        null::text as cfda_title,
+
         -- recipient data
         tf.awardee_or_recipient_uniqu as recipient_unique_id, -- DUNS
         tf.awardee_or_recipient_legal as recipient_name,
@@ -253,6 +291,25 @@ from
         latest_transaction_unique_id text,
         total_subaward_amount float(2),
         subaward_count int,
+        pulled_from text,
+        product_or_service_code text,
+        product_or_service_co_desc text,
+        extent_competed text,
+        extent_compete_description text,
+        type_of_contract_pricing text,
+        naics text,
+        naics_description text,
+        idv_type text,
+        idv_type_description text,
+        type_set_aside text,
+        type_set_aside_description text,
+        assistance_type text,
+        original_loan_subsidy_cost text,
+        record_type text,
+        business_funds_indicator text,
+        business_types text,
+        cfda_number text,
+        cfda_title text,
         
         -- recipient data
         recipient_unique_id text, -- DUNS
@@ -325,13 +382,13 @@ from
         
         -- congressional disctrict
         pop_congressional_code text
-    ))
-    -- inner join
-    -- award_category as ac on ac.type_code = type
-    -- inner join
-    -- agency_lookup as awarding_agency on awarding_agency.subtier_code = awarding_sub_tier_agency_c 
-    -- left outer join
-    -- agency_lookup as funding_agency on funding_agency.subtier_code = funding_sub_tier_agency_co)
+    )
+    inner join
+    award_category as ac on ac.type_code = type
+    inner join
+    agency_lookup as awarding_agency on awarding_agency.subtier_code = awarding_sub_tier_agency_c 
+    left outer join
+    agency_lookup as funding_agency on funding_agency.subtier_code = funding_sub_tier_agency_co)
 
 union all
 
@@ -363,6 +420,25 @@ union all
     latest_transaction_unique_id,
     total_subaward_amount,
     subaward_count,
+    pulled_from,
+    product_or_service_code,
+    product_or_service_co_desc,
+    extent_competed,
+    extent_compete_description,
+    type_of_contract_pricing,
+    naics,
+    naics_description,
+    idv_type,
+    idv_type_description,
+    type_set_aside,
+    type_set_aside_description,
+    assistance_type,
+    original_loan_subsidy_cost,
+    record_type,
+    business_funds_indicator,
+    business_types,
+    cfda_number,
+    cfda_title,
 
     -- recipient data
     recipient_unique_id, -- DUNS
@@ -434,12 +510,12 @@ union all
     -- pop_zip4,
 
     -- congressional disctrict
-    pop_congressional_code
+    pop_congressional_code,
 
-    -- ac.type_name as category,
-    -- awarding_agency.agency_id as awarding_agency_id,
-    -- funding_agency.agency_id as funding_agency_id,
-    -- fy(action_date) as fiscal_year
+    ac.type_name as category,
+    awarding_agency.agency_id as awarding_agency_id,
+    funding_agency.agency_id as funding_agency_id,
+    fy(action_date) as fiscal_year
 from
     dblink ('broker_stg_server', 'select
     ''asst_aw_'' ||
@@ -483,6 +559,25 @@ from
     ''asst_tx_'' || tf.afa_generated_unique as latest_transaction_unique_id,
     0 as total_subaward_amount,
     0 as subaward_count,
+    null::text as pulled_from,
+    null::text product_or_service_code as product_or_service_code,
+    null::text product_or_service_co_desc as product_or_service_co_desc,
+    null::text extent_competed as extent_competed,
+    null::text extent_compete_description as extent_compete_description,
+    null::text type_of_contract_pricing as type_of_contract_pricing,
+    null::text naics as naics,
+    null::text naics_description as naics_description,
+    null::text idv_type as idv_type,
+    null::text idv_type_description as idv_type_description,
+    null::text type_set_aside as type_set_aside,
+    null::text type_set_aside_description as type_set_aside_description,
+    tf.assistance_type as assistance_type,
+    tf.original_loan_subsidy_cost as original_loan_subsidy_cost,
+    tf.record_type as record_type,
+    tf.business_funds_indicator as business_funds_indicator,
+    tf.business_types as business_types,
+    tf.cfda_number as cfda_number,
+    tf.cfda_title as cfda_title,
     
     -- recipient data
     tf.awardee_or_recipient_uniqu as recipient_unique_id,
@@ -612,6 +707,25 @@ from
         latest_transaction_unique_id text,
         total_subaward_amount float(2),
         subaward_count int,
+        pulled_from text,
+        product_or_service_code text,
+        product_or_service_co_desc text,
+        extent_competed text,
+        extent_compete_description text,
+        type_of_contract_pricing text,
+        naics text,
+        naics_description text,
+        idv_type text,
+        idv_type_description text,
+        type_set_aside text,
+        type_set_aside_description text,
+        assistance_type text,
+        original_loan_subsidy_cost text,
+        record_type text,
+        business_funds_indicator text,
+        business_types text,
+        cfda_number text,
+        cfda_title text,
         
         -- recipient data
         recipient_unique_id text, -- DUNS
@@ -684,13 +798,13 @@ from
         
         -- congressional disctrict
         pop_congressional_code text
-    ))
-    -- inner join
-    -- award_category as ac on ac.type_code = type
-    -- inner join
-    -- agency_lookup as awarding_agency on awarding_agency.subtier_code = awarding_sub_tier_agency_c 
-    -- left outer join
-    -- agency_lookup as funding_agency on funding_agency.subtier_code = funding_sub_tier_agency_co)
+    )
+    inner join
+    award_category as ac on ac.type_code = type
+    inner join
+    agency_lookup as awarding_agency on awarding_agency.subtier_code = awarding_sub_tier_agency_c 
+    left outer join
+    agency_lookup as funding_agency on funding_agency.subtier_code = funding_sub_tier_agency_co)
 
 union all
 
@@ -722,6 +836,25 @@ union all
     latest_transaction_unique_id,
     total_subaward_amount,
     subaward_count,
+    pulled_from,
+    product_or_service_code,
+    product_or_service_co_desc,
+    extent_competed,
+    extent_compete_description,
+    type_of_contract_pricing,
+    naics,
+    naics_description,
+    idv_type,
+    idv_type_description,
+    type_set_aside,
+    type_set_aside_description,
+    assistance_type,
+    original_loan_subsidy_cost,
+    record_type,
+    business_funds_indicator,
+    business_types,
+    cfda_number,
+    cfda_title,
 
     -- recipient data
     recipient_unique_id, -- DUNS
@@ -793,12 +926,12 @@ union all
     -- pop_zip4,
 
     -- congressional disctrict
-    pop_congressional_code
+    pop_congressional_code,
 
-    -- ac.type_name as category,
-    -- awarding_agency.agency_id as awarding_agency_id,
-    -- funding_agency.agency_id as funding_agency_id,
-    -- fy(action_date) as fiscal_year
+    ac.type_name as category,
+    awarding_agency.agency_id as awarding_agency_id,
+    funding_agency.agency_id as funding_agency_id,
+    fy(action_date) as fiscal_year
 from
     dblink ('broker_stg_server', 'select
     ''asst_aw_'' ||
@@ -842,6 +975,25 @@ from
     ''asst_tx_'' || tf.afa_generated_unique as latest_transaction_unique_id,
     0 as total_subaward_amount,
     0 as subaward_count,
+    null::text as pulled_from,
+    null::text product_or_service_code as product_or_service_code,
+    null::text product_or_service_co_desc as product_or_service_co_desc,
+    null::text extent_competed as extent_competed,
+    null::text extent_compete_description as extent_compete_description,
+    null::text type_of_contract_pricing as type_of_contract_pricing,
+    null::text naics as naics,
+    null::text naics_description as naics_description,
+    null::text idv_type as idv_type,
+    null::text idv_type_description as idv_type_description,
+    null::text type_set_aside as type_set_aside,
+    null::text type_set_aside_description as type_set_aside_description,
+    tf.assistance_type as assistance_type,
+    tf.original_loan_subsidy_cost as original_loan_subsidy_cost,
+    tf.record_type as record_type,
+    tf.business_funds_indicator as business_funds_indicator,
+    tf.business_types as business_types,
+    tf.cfda_number as cfda_number,
+    tf.cfda_title as cfda_title,
     
     -- recipient data
     tf.awardee_or_recipient_uniqu as recipient_unique_id,
@@ -971,6 +1123,25 @@ from
         latest_transaction_unique_id text,
         total_subaward_amount float(2),
         subaward_count int,
+        pulled_from text,
+        product_or_service_code text,
+        product_or_service_co_desc text,
+        extent_competed text,
+        extent_compete_description text,
+        type_of_contract_pricing text,
+        naics text,
+        naics_description text,
+        idv_type text,
+        idv_type_description text,
+        type_set_aside text,
+        type_set_aside_description text,
+        assistance_type text,
+        original_loan_subsidy_cost text,
+        record_type text,
+        business_funds_indicator text,
+        business_types text,
+        cfda_number text,
+        cfda_title text,
         
         -- recipient data
         recipient_unique_id text, -- DUNS
@@ -1043,11 +1214,11 @@ from
         
         -- congressional disctrict
         pop_congressional_code text
-    ))
-    -- inner join
-    -- award_category as ac on ac.type_code = type
-    -- inner join
-    -- agency_lookup as awarding_agency on awarding_agency.subtier_code = awarding_sub_tier_agency_c 
-    -- left outer join
-    -- agency_lookup as funding_agency on funding_agency.subtier_code = funding_sub_tier_agency_co)
+    )
+    inner join
+    award_category as ac on ac.type_code = type
+    inner join
+    agency_lookup as awarding_agency on awarding_agency.subtier_code = awarding_sub_tier_agency_c 
+    left outer join
+    agency_lookup as funding_agency on funding_agency.subtier_code = funding_sub_tier_agency_co)
 );
