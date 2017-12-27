@@ -115,12 +115,12 @@ select
     -- pop_zip4,
 
     -- congressional disctrict
-    pop_congressional_code,
+    pop_congressional_code
 
-    ac.type_name as category,
-    awarding_agency.agency_id as awarding_agency_id,
-    funding_agency.agency_id as funding_agency_id,
-    fy(action_date) as fiscal_year
+    -- ac.type_name as category,
+    -- awarding_agency.agency_id as awarding_agency_id,
+    -- funding_agency.agency_id as funding_agency_id,
+    -- fy(action_date) as fiscal_year
 from
     dblink ('broker_stg_server', 'select
         distinct on (tf.piid, tf.parent_award_id, tf.agency_id, tf.referenced_idv_agency_iden)
@@ -377,9 +377,9 @@ from
         -- congressional disctrict
         pop_congressional_code text
     )
-    inner join
-    award_category as ac on ac.type_code = type
-    inner join
-    agency_lookup as awarding_agency on awarding_agency.subtier_code = awarding_sub_tier_agency_c 
-    left outer join
-    agency_lookup as funding_agency on funding_agency.subtier_code = funding_sub_tier_agency_co
+    -- inner join
+    -- award_category as ac on ac.type_code = type
+    -- inner join
+    -- agency_lookup as awarding_agency on awarding_agency.subtier_code = awarding_sub_tier_agency_c 
+    -- left outer join
+    -- agency_lookup as funding_agency on funding_agency.subtier_code = funding_sub_tier_agency_co
