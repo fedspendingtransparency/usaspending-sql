@@ -36,6 +36,8 @@
 --         exec_comp.officer_5_name is not null or
 --         exec_comp.officer_5_amount is not null
 -- )
+create materialized view fabs_fain_matview_temp2 as
+(
 select
     'asst_aw_' ||
         coalesce(tf.awarding_sub_tier_agency_c,'-none-') || '_' ||
@@ -55,25 +57,26 @@ select
         when tf.assistance_type = '11' then 'Other Financial Assistance'
     end as type_description,
     -- ac.type_name as category,
-    null as piid,
+    null::text as piid,
     tf.fain as fain,
-    null as uri,
+    null::text as uri,
     uniq_award.total_obligation as total_obligation,
-    null as total_outlay,
+    null::float as total_outlay,
     -- awarding_agency.agency_id as awarding_agency_id,
     awarding_agency.id as awarding_agency_id,
     tf.awarding_sub_tier_agency_c as awarding_sub_tier_agency_c,
     -- funding_agency.agency_id as funding_agency_id,
-    'DBR' as data_source,
+    'DBR'::text as data_source,
     uniq_award.signed_date as date_signed,
     tf.award_description as description,
     uniq_award.period_of_performance_start_date as period_of_performance_start_date,
     uniq_award.period_of_performance_current_end_date as period_of_performance_current_end_date,
-    null as potential_total_value_of_award,
-    null as base_and_all_options_value,
+    null::float as potential_total_value_of_award,
+    null::float as base_and_all_options_value,
     tf.modified_at as last_modified_date,   
     uniq_award.certified_date as certified_date,
     tf.transaction_id as latest_transaction_id,
+    tf.record_type as record_type,
     'asst_tx_' || tf.afa_generated_unique as latest_transaction_unique,
     0 as total_subaward_amount,
     0 as subaward_count,
@@ -140,7 +143,7 @@ select
     -- ppop data
     
     -- foreign
-    null as pop_foreign_province,
+    null::text as pop_foreign_province,
     
     -- country
     case
@@ -213,4 +216,22 @@ from
     agency as awarding_agency on awarding_subtier.subtier_agency_id = awarding_agency.subtier_agency_id
     -- left outer join
     -- exec_comp_lookup as exec_comp on exec_comp.duns = tf.awardee_or_recipient_uniqu
+
+    ) 
 ;
+
+create index fabs_fain_duns_idx on fabs_fain_matview_temp2 (recipient_unique_id);
+create index fabs_fain_generated_unique_award_id_idx on fabs_fain_matview_temp2 (generated_unique_award_id);
+create index fabs_fain_awarding_sub_tier_idx on fabs_fain_matview_temp2 (awarding_sub_tier_agency_c);
+create index fabs_fain_awarding_agency_id_idx on fabs_fain_matview_temp2 (awarding_agency_id);
+create index fabs_fain_duns_idx on fabs_fain_matview_temp2 (recipient_unique_id);
+create index fabs_fain_recipient_name_idx on fabs_fain_matview_temp2 (recipient_name);
+create index fabs_fain_fain_idx on fabs_fain_matview_temp2 (recipient_fain_id);
+create index fabs_fain_date_signed_idx on fabs_fain_matview_temp2 (date_signed);
+create index fabs_fain_certified_date_idx on fabs_fain_matview_temp2 (certified_date);
+
+
+
+
+
+
