@@ -1,6 +1,6 @@
-drop materialized view if exists award_matview;
+drop materialized view if exists assistance_award_matview;
 
-create materialized view award_matview as (
+create materialized view assistance_award_matview as (
 (select
     generated_unique_award_id,
     type,
