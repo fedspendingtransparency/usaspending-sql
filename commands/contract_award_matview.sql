@@ -251,7 +251,7 @@ from
     from
         detached_award_procurement tf -- aka latest transaction
         left outer join
-        executive_compensation as exec_comp on exec_comp.awardee_or_recipient_uniqu = tf.awardee_or_recipient_uniqu
+        exec_comp_lookup as exec_comp on exec_comp.awardee_or_recipient_uniqu = tf.awardee_or_recipient_uniqu
     window w as (partition by tf.piid, tf.parent_award_id, tf.agency_id, tf.referenced_idv_agency_iden)
     order by
         tf.piid,

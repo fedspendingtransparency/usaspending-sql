@@ -1,29 +1,54 @@
+drop materialized view if exists exec_comp_lookup;
+
 create materialized view exec_comp_lookup as (
 	select
-		distinct(legal_entity.recipient_unique_id) as duns,
-		exec_comp.officer_1_name as officer_1_name,
-		exec_comp.officer_1_amount as officer_1_amount,
-		exec_comp.officer_2_name as officer_2_name,
-		exec_comp.officer_2_amount as officer_2_amount,
-		exec_comp.officer_3_name as officer_3_name,
-		exec_comp.officer_3_amount as officer_3_amount,
-		exec_comp.officer_4_name as officer_4_name,
-		exec_comp.officer_4_amount as officer_4_amount,
-		exec_comp.officer_5_name as officer_5_name,
-		exec_comp.officer_5_amount as officer_5_amount
-	from
-		references_legalentityofficers as exec_comp
-	inner join
-		legal_entity on legal_entity.legal_entity_id = exec_comp.legal_entity_id
-	where
-		exec_comp.officer_1_name is not null or
-		exec_comp.officer_1_amount is not null or
-		exec_comp.officer_2_name is not null or
-		exec_comp.officer_2_amount is not null or
-		exec_comp.officer_3_name is not null or
-		exec_comp.officer_3_amount is not null or
-		exec_comp.officer_4_name is not null or
-		exec_comp.officer_4_amount is not null or
-		exec_comp.officer_5_name is not null or
-		exec_comp.officer_5_amount is not null
+		awardee_or_recipient_uniqu,
+		high_comp_officer1_full_na,
+		high_comp_officer1_amount,
+		high_comp_officer2_full_na,
+		high_comp_officer2_amount,
+		high_comp_officer3_full_na,
+		high_comp_officer3_amount,
+		high_comp_officer4_full_na,
+		high_comp_officer4_amount,
+		high_comp_officer5_full_na,
+		high_comp_officer5_amount
+	from dblink ('broker_server', 'select distinct on (awardee_or_recipient_uniqu)
+			awardee_or_recipient_uniqu,
+			high_comp_officer1_full_na,
+			high_comp_officer1_amount,
+			high_comp_officer2_full_na,
+			high_comp_officer2_amount,
+			high_comp_officer3_full_na,
+			high_comp_officer3_amount,
+			high_comp_officer4_full_na,
+			high_comp_officer4_amount,
+			high_comp_officer5_full_na,
+			high_comp_officer5_amount
+		from executive_compensation
+		where 
+			coalesce(high_comp_officer1_full_na, '''') != '''' or
+			coalesce(high_comp_officer1_amount, '''') != '''' or
+			coalesce(high_comp_officer2_full_na, '''') != '''' or
+			coalesce(high_comp_officer2_amount, '''') != '''' or
+			coalesce(high_comp_officer3_full_na, '''') != '''' or
+			coalesce(high_comp_officer3_amount, '''') != '''' or
+			coalesce(high_comp_officer4_full_na, '''') != '''' or
+			coalesce(high_comp_officer4_amount, '''') != '''' or
+			coalesce(high_comp_officer5_full_na, '''') != '''' or
+			coalesce(high_comp_officer5_amount, '''') != ''''
+		order by awardee_or_recipient_uniqu, created_at desc') as exec_comp
+	(
+		awardee_or_recipient_uniqu text,
+		high_comp_officer1_full_na text,
+		high_comp_officer1_amount text,
+		high_comp_officer2_full_na text,
+		high_comp_officer2_amount text,
+		high_comp_officer3_full_na text,
+		high_comp_officer3_amount text,
+		high_comp_officer4_full_na text,
+		high_comp_officer4_amount text,
+		high_comp_officer5_full_na text,
+		high_comp_officer5_amount text
+	)
 );

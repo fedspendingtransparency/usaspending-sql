@@ -261,7 +261,7 @@ from
     
 from published_award_financial_assistance as pafa
     left outer join
-    executive_compensation as exec_comp on exec_comp.awardee_or_recipient_uniqu = pafa.awardee_or_recipient_uniqu
+    exec_comp_lookup as exec_comp on exec_comp.awardee_or_recipient_uniqu = pafa.awardee_or_recipient_uniqu
 where pafa.record_type = ''2'' and is_active=TRUE
 window w as (partition by pafa.fain, pafa.awarding_sub_tier_agency_c)
 order by
@@ -658,7 +658,7 @@ from
     
 from published_award_financial_assistance as pafa
     left outer join
-    executive_compensation as exec_comp on exec_comp.awardee_or_recipient_uniqu = pafa.awardee_or_recipient_uniqu
+    exec_comp_lookup as exec_comp on exec_comp.awardee_or_recipient_uniqu = pafa.awardee_or_recipient_uniqu
 where pafa.record_type = ''1'' and is_active=TRUE
 window w as (partition by pafa.uri, pafa.awarding_sub_tier_agency_c)
 order by
