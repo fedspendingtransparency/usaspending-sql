@@ -682,7 +682,7 @@ from
             pafa.action_date,
             pafa.award_modification_amendme,
             pafa.afa_generated_unique,
-            count(pafa.uri) over w as sumfain,
+            count(pafa.uri) over w as sumuri,
             max(pafa.action_date) over w as certified_date,
             min(pafa.action_date) over w as signed_date,
             min(pafa.period_of_performance_star::date) over w as period_of_performance_start_date,
